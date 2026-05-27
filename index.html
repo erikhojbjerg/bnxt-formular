@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business NXT — Oprettelses­formular</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F5F4F0;
+  --surface:#FFFFFF;
+  --border:#E2E0DA;
+  --border-strong:#C8C5BC;
+  --text:#1A1917;
+  --text-muted:#6B6860;
+  --text-hint:#A09D96;
+  --accent:#1A1917;
+  --accent-light:#F0EFE9;
+  --success:#1D6A45;
+  --success-bg:#E8F5EE;
+  --danger:#C0392B;
+  --radius:10px;
+  --radius-lg:16px;
+  --shadow:0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem}
+.page-header{max-width:760px;margin:0 auto 2rem;display:flex;align-items:center;gap:14px}
+.logo{width:36px;height:36px;background:var(--text);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo svg{width:20px;height:20px;fill:white}
+.page-title{font-size:20px;font-weight:600;letter-spacing:-0.3px}
+.page-sub{font-size:13px;color:var(--text-muted);margin-top:2px}
+.container{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+
+.company-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow)}
+.company-card label{font-size:13px;font-weight:500;color:var(--text-muted);white-space:nowrap;display:flex;align-items:center;gap:6px}
+.company-card select{flex:1;border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text);appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6860' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:32px}
+.company-badge{font-family:'DM Mono',monospace;font-size:11px;background:var(--accent-light);color:var(--text-muted);border-radius:6px;padding:4px 10px;white-space:nowrap;border:1px solid var(--border)}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab-btn{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px 16px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;color:var(--text-muted);transition:all .15s;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{border-color:var(--border-strong);color:var(--text)}
+.tab-btn.active{background:var(--text);border-color:var(--text);color:#fff}
+.tab-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem;box-shadow:var(--shadow);display:none}
+.form-card.active{display:block}
+.form-title{font-size:16px;font-weight:600;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px}
+.form-title svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.antal-row{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:1.5rem}
+.antal-row>label{font-size:13px;font-weight:500;color:var(--text-muted);white-space:nowrap}
+.antal-row input[type=range]{flex:1;accent-color:var(--text)}
+.antal-val{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;min-width:28px;text-align:center}
+.antal-row input[type=number]{width:64px;border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-family:'DM Mono',monospace;font-size:13px;text-align:center;background:var(--surface)}
+
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.fg.full{grid-template-columns:1fr}
+@media(max-width:560px){.fg{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:500;color:var(--text-muted);letter-spacing:0.2px}
+.field input,.field select,.field textarea{border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--surface);transition:border-color .15s;width:100%}
+.field input:focus,.field select:focus{outline:none;border-color:var(--text)}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6860' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:32px;cursor:pointer}
+.field .hint{font-size:11px;color:var(--text-hint)}
+.req{color:var(--danger)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
+
+.submit-btn{display:inline-flex;align-items:center;gap:8px;background:var(--text);color:#fff;border:none;border-radius:var(--radius);padding:11px 22px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s;margin-top:0.5rem}
+.submit-btn:hover{opacity:0.85}
+.submit-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+.result-overlay{display:none;position:fixed;inset:0;background:rgba(26,25,23,0.5);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.result-overlay.show{display:flex}
+.result-modal{background:var(--surface);border-radius:var(--radius-lg);padding:2rem;max-width:600px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,0.15);max-height:90vh;overflow-y:auto}
+.result-modal h3{font-size:16px;font-weight:600;margin-bottom:0.5rem}
+.result-modal p{font-size:13px;color:var(--text-muted);margin-bottom:1rem}
+.result-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;font-family:'DM Mono',monospace;font-size:12px;line-height:1.8;white-space:pre-wrap;word-break:break-all;max-height:320px;overflow-y:auto;margin-bottom:1rem}
+.modal-actions{display:flex;gap:8px;flex-wrap:wrap}
+.copy-btn{display:inline-flex;align-items:center;gap:6px;background:var(--text);color:#fff;border:none;border-radius:var(--radius);padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.copy-btn:hover{opacity:0.85}
+.close-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:var(--radius);padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer}
+.close-btn:hover{border-color:var(--border-strong);color:var(--text)}
+.copied-badge{display:none;background:var(--success-bg);color:var(--success);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:500;align-items:center;gap:4px}
+.copied-badge.show{display:inline-flex}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="logo">
+    <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM9 9h6v6H9z"/></svg>
+  </div>
+  <div>
+    <div class="page-title">Business NXT</div>
+    <div class="page-sub">Oprettelses­formular</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="company-card">
+    <label>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Virksomhed
+    </label>
+    <select id="company-select" onchange="updateBadge()">
+      <option value="5957403|5881165">External testing HOLIO AS</option>
+      <option value="5829417|5021646">Business NXT 2026</option>
+      <option value="5125152|5021646">Business NXT Presentation</option>
+      <option value="5172930|5021646">Business NXT Sandbox</option>
+      <option value="5021649|5021646" selected>Business NXT demo intern</option>
+      <option value="5870652|5021646">Business NXT skabelon - vertical Demo</option>
+      <option value="5614123|5021646">Erik Højbjerg - testfirma</option>
+      <option value="4769576|4769371">DK BNXT test real deal</option>
+    </select>
+    <span class="company-badge" id="company-badge">nr. 5021649</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('kunde',event)">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Kunde
+    </button>
+    <button class="tab-btn" onclick="showTab('leverandoer',event)">
+      <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Leverandør
+    </button>
+    <button class="tab-btn" onclick="showTab('produkt',event)">
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Produkt
+    </button>
+    <button class="tab-btn" onclick="showTab('regnskabsaar',event)">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Regnskabsår
+    </button>
+    <button class="tab-btn" onclick="showTab('periode',event)">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/></svg>Periode
+    </button>
+    <button class="tab-btn" onclick="showTab('medarbejder',event)">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Medarbejder
+    </button>
+  </div>
+
+  <!-- KUNDE -->
+  <div class="form-card active" id="tab-kunde">
+    <div class="form-title">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Opret kunder
+    </div>
+    <div class="antal-row">
+      <label>Antal</label>
+      <input type="range" min="1" max="50" step="1" value="1" id="k-antal-range" oninput="syncAntal('k')">
+      <span class="antal-val" id="k-antal-val">1</span>
+      <input type="number" min="1" max="50" value="1" id="k-antal-num" oninput="syncAntalNum('k')">
+    </div>
+    <div class="fg">
+      <div class="field"><label>Navn <span class="req">*</span></label><input type="text" id="k-navn" placeholder="Firmanavn A/S"></div>
+      <div class="field"><label>CVR-nummer</label><input type="text" id="k-cvr" placeholder="12345678"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Adresse</label><input type="text" id="k-adresse" placeholder="Gærtorvet 3"></div>
+      <div class="field"><label>Postnummer</label><input type="text" id="k-postnr" placeholder="1799"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>By</label><input type="text" id="k-by" placeholder="København V"></div>
+      <div class="field"><label>Land</label>
+        <select id="k-land"><option value="45">Danmark (45)</option><option value="46">Sverige (46)</option><option value="47">Norge (47)</option><option value="49">Tyskland (49)</option></select>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Email</label><input type="email" id="k-email" placeholder="info@firma.dk"></div>
+      <div class="field"><label>Telefon</label><input type="text" id="k-telefon" placeholder="70123456"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Valuta</label><select id="k-valuta"><option value="45">DKK</option><option value="46">SEK</option><option value="47">NOK</option><option value="978">EUR</option></select></div>
+      <div class="field"><label>Sprog</label><select id="k-sprog"><option value="45">Dansk</option><option value="47">Norsk</option><option value="46">Svensk</option><option value="826">Engelsk</option></select></div>
+    </div>
+    <button class="submit-btn" onclick="opret('kunde')">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span id="k-btn-label">Opret 1 kunde</span>
+    </button>
+  </div>
+
+  <!-- LEVERANDØR -->
+  <div class="form-card" id="tab-leverandoer">
+    <div class="form-title">
+      <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      Opret leverandører
+    </div>
+    <div class="antal-row">
+      <label>Antal</label>
+      <input type="range" min="1" max="50" step="1" value="1" id="l-antal-range" oninput="syncAntal('l')">
+      <span class="antal-val" id="l-antal-val">1</span>
+      <input type="number" min="1" max="50" value="1" id="l-antal-num" oninput="syncAntalNum('l')">
+    </div>
+    <div class="fg">
+      <div class="field"><label>Navn <span class="req">*</span></label><input type="text" id="l-navn" placeholder="Leverandør A/S"></div>
+      <div class="field"><label>CVR-nummer</label><input type="text" id="l-cvr" placeholder="12345678"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Adresse</label><input type="text" id="l-adresse" placeholder="Hovedgaden 1"></div>
+      <div class="field"><label>Postnummer</label><input type="text" id="l-postnr" placeholder="2000"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>By</label><input type="text" id="l-by" placeholder="Frederiksberg"></div>
+      <div class="field"><label>Land</label><select id="l-land"><option value="45">Danmark (45)</option><option value="46">Sverige (46)</option><option value="47">Norge (47)</option><option value="49">Tyskland (49)</option></select></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="info@leverandoer.dk"></div>
+      <div class="field"><label>Telefon</label><input type="text" id="l-telefon" placeholder="70123456"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Valuta</label><select id="l-valuta"><option value="45">DKK</option><option value="46">SEK</option><option value="47">NOK</option><option value="978">EUR</option></select></div>
+      <div class="field"><label>Betalingsbetingelse (dage)</label><input type="number" id="l-betaling" placeholder="30" min="0"></div>
+    </div>
+    <button class="submit-btn" onclick="opret('leverandoer')">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span id="l-btn-label">Opret 1 leverandør</span>
+    </button>
+  </div>
+
+  <!-- PRODUKT -->
+  <div class="form-card" id="tab-produkt">
+    <div class="form-title">
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Opret produkter
+    </div>
+    <div class="antal-row">
+      <label>Antal</label>
+      <input type="range" min="1" max="50" step="1" value="1" id="p-antal-range" oninput="syncAntal('p')">
+      <span class="antal-val" id="p-antal-val">1</span>
+      <input type="number" min="1" max="50" value="1" id="p-antal-num" oninput="syncAntalNum('p')">
+    </div>
+    <div class="hint" style="margin-bottom:14px;font-size:12px;color:#A09D96">Ved flere produkter nummereres produktnummer automatisk — fx RK300, RK301, RK302...</div>
+    <div class="fg">
+      <div class="field"><label>Produktnummer <span class="req">*</span></label><input type="text" id="p-nr" placeholder="RK300"></div>
+      <div class="field"><label>Beskrivelse <span class="req">*</span></label><input type="text" id="p-beskrivelse" placeholder="Rejsekuffert stor"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Salgspris</label><input type="number" id="p-pris" placeholder="500" min="0"></div>
+      <div class="field"><label>Kostpris</label><input type="number" id="p-kostpris" placeholder="250" min="0"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Enhed</label><select id="p-enhed"><option value="1">Stk</option><option value="2">Kg</option><option value="3">Liter</option><option value="4">Timer</option></select></div>
+      <div class="field"><label>Produkttype</label><select id="p-type"><option value="1">Lagervare</option><option value="2">Serviceydelse</option><option value="3">Ikke-lagervare</option></select></div>
+    </div>
+    <button class="submit-btn" onclick="opret('produkt')">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span id="p-btn-label">Opret 1 produkt</span>
+    </button>
+  </div>
+
+  <!-- REGNSKABSÅR -->
+  <div class="form-card" id="tab-regnskabsaar">
+    <div class="form-title">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Opret regnskabsår
+    </div>
+    <div class="fg">
+      <div class="field"><label>Regnskabsår <span class="req">*</span></label><input type="number" id="r-aar" placeholder="2027" min="2000" max="2099"></div>
+      <div class="field"><label>Startdato <span class="req">*</span></label><input type="date" id="r-start"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Slutdato <span class="req">*</span></label><input type="date" id="r-slut"></div>
+      <div class="field"><label>Antal perioder</label><select id="r-perioder"><option value="12">12 (månedlige)</option><option value="4">4 (kvartalsvise)</option><option value="1">1 (årlig)</option></select></div>
+    </div>
+    <button class="submit-btn" onclick="opret('regnskabsaar')">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Opret regnskabsår
+    </button>
+  </div>
+
+  <!-- PERIODE -->
+  <div class="form-card" id="tab-periode">
+    <div class="form-title">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Opret periode
+    </div>
+    <div class="fg">
+      <div class="field"><label>Regnskabsår <span class="req">*</span></label><input type="number" id="per-aar" placeholder="2027" min="2000" max="2099"></div>
+      <div class="field"><label>Periodenummer <span class="req">*</span></label><input type="number" id="per-nr" placeholder="1" min="1" max="12"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Startdato <span class="req">*</span></label><input type="date" id="per-start"></div>
+      <div class="field"><label>Slutdato <span class="req">*</span></label><input type="date" id="per-slut"></div>
+    </div>
+    <button class="submit-btn" onclick="opret('periode')">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Opret periode
+    </button>
+  </div>
+
+  <!-- MEDARBEJDER -->
+  <div class="form-card" id="tab-medarbejder">
+    <div class="form-title">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Opret medarbejder
+    </div>
+    <div class="fg">
+      <div class="field"><label>Fornavn <span class="req">*</span></label><input type="text" id="m-fornavn" placeholder="Anders"></div>
+      <div class="field"><label>Efternavn <span class="req">*</span></label><input type="text" id="m-efternavn" placeholder="Jensen"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Email</label><input type="email" id="m-email" placeholder="anders.jensen@firma.dk"></div>
+      <div class="field"><label>Telefon</label><input type="text" id="m-telefon" placeholder="60123456"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Afdeling</label><select id="m-afdeling"><option value="50">IT (50)</option><option value="60">HR (60)</option><option value="70">Salg (70)</option><option value="80">Finans (80)</option><option value="90">Admin (90)</option></select></div>
+      <div class="field"><label>Ansættelsesdato</label><input type="date" id="m-dato"></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Stilling</label><input type="text" id="m-stilling" placeholder="Salgskonsulent"></div>
+      <div class="field"><label>Medarbejdertype</label><select id="m-type"><option value="1">Fastansat</option><option value="2">Deltid</option><option value="3">Konsulent</option></select></div>
+    </div>
+    <button class="submit-btn" onclick="opret('medarbejder')">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Opret medarbejder
+    </button>
+  </div>
+
+</div>
+
+<!-- RESULT MODAL -->
+<div class="result-overlay" id="result-overlay" onclick="closeModal(event)">
+  <div class="result-modal">
+    <h3 id="modal-title">Anmodning klar</h3>
+    <p>Kopier teksten herunder og indsæt den i din Claude-chat for at oprette i Business NXT.</p>
+    <div class="result-box" id="result-box"></div>
+    <div class="modal-actions">
+      <button class="copy-btn" onclick="copyResult()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Kopiér
+      </button>
+      <button class="close-btn" onclick="closeModal()">Luk</button>
+      <span class="copied-badge" id="copied-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Kopieret!
+      </span>
+    </div>
+  </div>
+</div>
+
+<script>
+function v(id){return(document.getElementById(id)||{}).value||''}
+
+function getCompany(){
+  const sel=document.getElementById('company-select');
+  const parts=sel.value.split('|');
+  return{companyNo:parts[0],tenantId:parts[1],name:sel.options[sel.selectedIndex].text}
+}
+
+function updateBadge(){
+  document.getElementById('company-badge').textContent='nr. '+getCompany().companyNo;
+}
+
+function syncAntal(prefix){
+  const n=parseInt(document.getElementById(prefix+'-antal-range').value)||1;
+  document.getElementById(prefix+'-antal-val').textContent=n;
+  document.getElementById(prefix+'-antal-num').value=n;
+  updateBtn(prefix,n);
+}
+function syncAntalNum(prefix){
+  let n=parseInt(document.getElementById(prefix+'-antal-num').value)||1;
+  n=Math.min(50,Math.max(1,n));
+  document.getElementById(prefix+'-antal-num').value=n;
+  document.getElementById(prefix+'-antal-range').value=n;
+  document.getElementById(prefix+'-antal-val').textContent=n;
+  updateBtn(prefix,n);
+}
+function updateBtn(prefix,n){
+  const labels={k:['kunde','kunder'],l:['leverandør','leverandører'],p:['produkt','produkter']};
+  if(!labels[prefix])return;
+  const[s,p]=labels[prefix];
+  document.getElementById(prefix+'-btn-label').textContent='Opret '+n+' '+(n===1?s:p);
+}
+
+function showTab(name,e){
+  document.querySelectorAll('.form-card').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  e.target.closest('.tab-btn').classList.add('active');
+}
+
+function showResult(title, text){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('result-box').textContent=text;
+  document.getElementById('result-overlay').classList.add('show');
+  document.getElementById('copied-badge').classList.remove('show');
+}
+
+function closeModal(e){
+  if(!e||e.target===document.getElementById('result-overlay'))
+    document.getElementById('result-overlay').classList.remove('show');
+}
+
+function copyResult(){
+  navigator.clipboard.writeText(document.getElementById('result-box').textContent).then(()=>{
+    document.getElementById('copied-badge').classList.add('show');
+    setTimeout(()=>document.getElementById('copied-badge').classList.remove('show'),2000);
+  });
+}
+
+function opret(type){
+  const c=getCompany();
+  const firma='Virksomhed: '+c.name+' (companyNo: '+c.companyNo+', tenantId: '+c.tenantId+')';
+  let lines=[];
+
+  if(type==='kunde'){
+    const navn=v('k-navn');if(!navn){alert('Navn er påkrævet');return;}
+    const antal=parseInt(v('k-antal-range'))||1;
+    lines=[firma,'Opret '+antal+' kunde'+(antal>1?'r':'')+':','Navn: '+navn,v('k-cvr')?'CVR: '+v('k-cvr'):'',v('k-adresse')?'Adresse: '+v('k-adresse'):'',v('k-postnr')?'Postnr: '+v('k-postnr'):'',v('k-by')?'By: '+v('k-by'):'','Land: '+v('k-land'),v('k-email')?'Email: '+v('k-email'):'',v('k-telefon')?'Telefon: '+v('k-telefon'):'','Valuta: '+v('k-valuta'),'Sprog: '+v('k-sprog')];
+    showResult('Opret '+(antal>1?antal+' kunder':'kunde'),lines.filter(Boolean).join('\n'));
+  } else if(type==='leverandoer'){
+    const navn=v('l-navn');if(!navn){alert('Navn er påkrævet');return;}
+    const antal=parseInt(v('l-antal-range'))||1;
+    lines=[firma,'Opret '+antal+' leverandør'+(antal>1?'er':'')+':','Navn: '+navn,v('l-cvr')?'CVR: '+v('l-cvr'):'',v('l-adresse')?'Adresse: '+v('l-adresse'):'',v('l-postnr')?'Postnr: '+v('l-postnr'):'',v('l-by')?'By: '+v('l-by'):'','Land: '+v('l-land'),v('l-email')?'Email: '+v('l-email'):'',v('l-telefon')?'Telefon: '+v('l-telefon'):'','Valuta: '+v('l-valuta'),v('l-betaling')?'Betalingsbetingelse: '+v('l-betaling')+' dage':''];
+    showResult('Opret '+(antal>1?antal+' leverandører':'leverandør'),lines.filter(Boolean).join('\n'));
+  } else if(type==='produkt'){
+    const nr=v('p-nr'),besk=v('p-beskrivelse');if(!nr||!besk){alert('Produktnummer og beskrivelse er påkrævet');return;}
+    const antal=parseInt(v('p-antal-range'))||1;
+    lines=[firma,'Opret '+antal+' produkt'+(antal>1?'er':'')+':','Produktnr: '+nr,'Beskrivelse: '+besk,v('p-pris')?'Salgspris: '+v('p-pris'):'',v('p-kostpris')?'Kostpris: '+v('p-kostpris'):'','Enhed: '+v('p-enhed'),'Type: '+v('p-type')];
+    showResult('Opret '+(antal>1?antal+' produkter':'produkt'),lines.filter(Boolean).join('\n'));
+  } else if(type==='regnskabsaar'){
+    const aar=v('r-aar'),start=v('r-start'),slut=v('r-slut');if(!aar||!start||!slut){alert('År, startdato og slutdato er påkrævet');return;}
+    lines=[firma,'Opret regnskabsår:','År: '+aar,'Startdato: '+start,'Slutdato: '+slut,'Antal perioder: '+v('r-perioder')];
+    showResult('Opret regnskabsår',lines.join('\n'));
+  } else if(type==='periode'){
+    const aar=v('per-aar'),nr=v('per-nr'),start=v('per-start'),slut=v('per-slut');if(!aar||!nr||!start||!slut){alert('Alle felter er påkrævet');return;}
+    lines=[firma,'Opret periode:','Regnskabsår: '+aar,'Periodenummer: '+nr,'Startdato: '+start,'Slutdato: '+slut];
+    showResult('Opret periode',lines.join('\n'));
+  } else if(type==='medarbejder'){
+    const fn=v('m-fornavn'),en=v('m-efternavn');if(!fn||!en){alert('For- og efternavn er påkrævet');return;}
+    lines=[firma,'Opret medarbejder:','Navn: '+fn+' '+en,v('m-email')?'Email: '+v('m-email'):'',v('m-telefon')?'Telefon: '+v('m-telefon'):'','Afdeling: '+v('m-afdeling'),v('m-dato')?'Ansættelsesdato: '+v('m-dato'):'',v('m-stilling')?'Stilling: '+v('m-stilling'):'','Type: '+v('m-type')];
+    showResult('Opret medarbejder',lines.filter(Boolean).join('\n'));
+  }
+}
+</script>
+</body>
+</html>
